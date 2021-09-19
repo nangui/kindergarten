@@ -6,11 +6,11 @@
 
 <div class="py-6">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 gap-4">
-            <livewire:school-year.show />
-            <livewire:school-class.show />
-            <livewire:canteen.show />
+        <div class="grid grid-cols-3 gap-4">
             <livewire:transport.show />
+            <livewire:school-year.show />
+            <livewire:canteen.show />
+            <livewire:school-class.show />
         </div>
     </div>
 </div>
