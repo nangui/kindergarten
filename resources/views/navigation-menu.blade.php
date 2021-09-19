@@ -15,16 +15,16 @@
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Tableau de bord') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('login')">
+                    <x-jet-nav-link href="{{ route('tutor.list') }}" :active="request()->routeIs('tutor.list')">
                         {{ __('Parents') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('login')">
+                    <x-jet-nav-link href="{{ route('pupil.list') }}" :active="request()->routeIs('pupil.list')">
                         {{ __('Élèves') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('login')">
-                        {{ __('Génération factures') }}
+                    <x-jet-nav-link href="{{ route('invoice.list') }}" :active="request()->routeIs('invoice.list')">
+                        {{ __('Factures') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('login')">
+                    <x-jet-nav-link href="{{ route('settings') }}" :active="request()->routeIs('settings')">
                         {{ __('Paramétrages') }}
                     </x-jet-nav-link>
                 </div>
