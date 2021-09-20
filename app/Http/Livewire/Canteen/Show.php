@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Canteen;
 
 use App\Models\Canteen;
 use Livewire\Component;
-
 class Show extends Component
 {
     public $canteens;
