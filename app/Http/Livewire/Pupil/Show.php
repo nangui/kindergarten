@@ -6,10 +6,12 @@ use App\Models\Pupil;
 use App\Models\Tutor;
 use Livewire\Component;
 use Illuminate\Support\Str;
+use Livewire\WithPagination;
 
 class Show extends Component
 {
-    public $pupils;
+    use WithPagination;
+
     public $pupil;
     public $confirmingPupilDeletion = false;
     public $confirmingPupilAdd = false;
@@ -17,7 +19,7 @@ class Show extends Component
     protected $rules = [
         'pupil.first_name' => 'required',
         'pupil.last_name' => 'required',
-        'pupil.code' => 'unique:pupils',
+        'pupil.code' => 'sometimes|min:4',
         'pupil.genre' => 'required',
         'pupil.birth_date' => 'required|date',
         'pupil.tutor_id' => 'exists:tutors,id',
@@ -31,15 +33,10 @@ class Show extends Component
         'pupil.tutor_id.exists' => 'Ce tuteur n\'existe pas en base de données',
     ];
 
-    public function mount()
-    {
-        $this->pupils = Pupil::all();
-    }
-
     public function render()
     {
         return view('livewire.pupil.show', [
-            'pupils' => $this->pupils,
+            'pupils' => Pupil::with('subscriptions')->orderBy('id', 'desc')->simplePaginate(10),
             'tutors' => Tutor::all(),
         ]);
     }
@@ -87,6 +84,6 @@ class Show extends Component
             session()->flash('message', 'Élève ajouté avec succès.');
         }
         $this->confirmingPupilAdd = false;
-        $this->pupils = Pupil::all();
+        $this->render();
     }
 }

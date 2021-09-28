@@ -21,8 +21,8 @@
                     <x-jet-nav-link href="{{ route('pupil.list') }}" :active="request()->routeIs('pupil.list')">
                         {{ __('Élèves') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('invoice.list') }}" :active="request()->routeIs('invoice.list')">
-                        {{ __('Factures') }}
+                    <x-jet-nav-link href="{{ route('subscription.list') }}" :active="request()->routeIs('subscription.list')">
+                        {{ __('Abonnements (Facturation)') }}
                     </x-jet-nav-link>
                     <x-jet-nav-link href="{{ route('settings') }}" :active="request()->routeIs('settings')">
                         {{ __('Paramétrages') }}

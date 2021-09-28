@@ -6,6 +6,42 @@
 
 <div class="py-6">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <!-- Filters -->
+        <div class="w-full overflow-hidden px-4 py-5 bg-white sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md mb-8">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4">
+                {{ __('Filtres') }}
+            </h2>
+            <div class="flex flex-row space-y-0 space-x-4 mb-4">
+                <div class="w-1/3">
+                    <x-jet-label for="code" value="{{ __('Code') }}" />
+                    <x-jet-input id="code" type="text" class="mt-1 block w-full" wire:model.defer="search.code" />
+                </div>
+    
+                <div class="w-1/3">
+                    <x-jet-label for="name" value="{{ __('Nom ou prénom') }}" />
+                    <x-jet-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="search.name" />
+                </div>
+                
+                <div class="w-1/3">
+                    <x-native-select
+                        label="Tuteurs"
+                        wire:model.defer="pupil.tutor_id"
+                    >
+                        <option value="">{{ __('Selectionnez le tuteur') }}</option>
+                        @foreach ($tutors as $tutor)
+                            <option value="{{$tutor->id}}">
+                                {{ $tutor->first_name }} {{ $tutor->last_name }}
+                            </option>
+                        @endforeach
+                    </x-native-select>
+                </div>
+            </div>
+            <x-jet-button wire:click="" wire:loading.attr="disabled">
+                {{ __('Filtrer') }}
+            </x-jet-button>
+        </div>
+        <!-- End filters -->
+
         <div class="w-full overflow-hidden px-4 py-5 bg-white sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
             <div class="pb-4 flex items-center">
                 <x-jet-button wire:click="confirmPupilAdd" wire:loading.attr="disabled">
@@ -66,10 +102,10 @@
                             <td>{{ $p->birth_date }}</td>
                             <td>{{ $p->tutor->first_name }} {{ $p->tutor->last_name }}</td>
                             <td class="py-2">
-                                <x-jet-button class="ml-2 bg-orange-500 hover:bg-orange-700" wire:click="confirmPupilEdit({{ $p->id }})" :wire:key="$p->id">
+                                <x-jet-button class="ml-2 bg-orange-500 hover:bg-orange-700" wire:click="confirmPupilEdit({{ $p->id }})" wire:key="$p->id">
                                     {{ __('Editer') }}
                                 </x-jet-button>
-                                <x-jet-danger-button class="ml-2" wire:click="confirmPupilDeletion({{ $p->id }})" wire:loading.attr="disabled" :wire:key="$p->id">
+                                <x-jet-danger-button class="ml-2" wire:click="confirmPupilDeletion({{ $p->id }})" wire:loading.attr="disabled" wire:key="$p->id">
                                     {{ __('Supprimer') }}
                                 </x-jet-danger-button>
                             </td>
@@ -77,6 +113,9 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="mt-8">
+                {{ $pupils->links() }}
+            </div>
         </div>
     </div>
     <!-- Add Pupil Modal -->

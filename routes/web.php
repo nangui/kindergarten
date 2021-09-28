@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\InvoiceController;
 use App\Http\Livewire\Tutor\Show as TutorShow;
 use App\Http\Livewire\Pupil\Show as PupilShow;
+use App\Http\Livewire\Subscription\Show as SubscriptionShow;
 use App\Http\Livewire\SettingShow;
 use Illuminate\Support\Facades\Route;
 
@@ -29,7 +29,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
     Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::get('/tutors', TutorShow::class)->name('tutor.list');
         Route::get('/pupils', PupilShow::class)->name('pupil.list');
-        Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.list');
+        Route::get('/subscriptions', SubscriptionShow::class)->name('subscription.list');
         Route::get('/settings', SettingShow::class)->name('settings');
     });
 });
