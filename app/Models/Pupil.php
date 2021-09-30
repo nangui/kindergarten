@@ -17,4 +17,19 @@ class Pupil extends Model
     {
         return $this->belongsTo('App\Models\Tutor');
     }
+
+    public function subscriptions()
+    {
+        return $this->hasMany('App\Models\Subscription');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getTutorFullNameAttribute()
+    {
+        return "{$this->tutor->first_name} {$this->tutor->last_name}";
+    }
 }

@@ -1,7 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-    mode: 'jit',
+    mode: 'default',
     presets: [
         require('./vendor/ph7jack/wireui/tailwind.config.js')
     ],

@@ -64,10 +64,10 @@
                             <td>{{ $t->phone1 }}</td>
                             <td>{{ $t->phone2 ? $t->phone2 : 'Aucun' }}</td>
                             <td class="py-2">
-                                <x-jet-button class="ml-2 bg-orange-500 hover:bg-orange-700" wire:click="confirmTutorEdit({{ $t->id }})" :wire:key="$t->id">
+                                <x-jet-button class="ml-2 bg-orange-500 hover:bg-orange-700" wire:click="confirmTutorEdit({{ $t->id }})" wire:key="$t->id">
                                     {{ __('Editer') }}
                                 </x-jet-button>
-                                <x-jet-danger-button class="ml-2" wire:click="confirmTutorDeletion({{ $t->id }})" wire:loading.attr="disabled" :wire:key="$t->id">
+                                <x-jet-danger-button class="ml-2" wire:click="confirmTutorDeletion({{ $t->id }})" wire:loading.attr="disabled" wire:key="$t->id">
                                     {{ __('Supprimer') }}
                                 </x-jet-danger-button>
                             </td>
@@ -75,6 +75,9 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="mt-8">
+                {{ $tutors->links() }}
+            </div>
         </div>
     </div>
     <!-- Add Tutor Modal -->

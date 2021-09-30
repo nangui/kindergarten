@@ -14,12 +14,12 @@
             <div class="flex flex-row space-y-0 space-x-4 mb-4">
                 <div class="w-1/3">
                     <x-jet-label for="code" value="{{ __('Code') }}" />
-                    <x-jet-input id="code" type="text" class="mt-1 block w-full" wire:model.defer="search.code" />
+                    <x-jet-input id="code" type="text" placeholder="Entrer le code" class="mt-1 block w-full" wire:model.defer="search.code" />
                 </div>
     
                 <div class="w-1/3">
                     <x-jet-label for="name" value="{{ __('Nom ou prénom') }}" />
-                    <x-jet-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="search.name" />
+                    <x-jet-input id="name" type="text" placeholder="Entrer le nom ou le prénom" class="mt-1 block w-full" wire:model.defer="search.name" />
                 </div>
                 
                 <div class="w-1/3">
