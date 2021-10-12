@@ -25,10 +25,12 @@ class Show extends Component
     public $newSubscription;
     public $pupils;
     public $tutors;
+    public $search;
     public $hasCanteen = false;
     public $hasTransport = false;
     public $confirmingSubscriptionDeletion = false;
     public $confirmingSubscriptionAdd = false;
+    private $subscriptions = [];
 
     public function mount()
     {
@@ -158,8 +160,16 @@ class Show extends Component
         }
     }
 
-    public function search()
-    {}
+    public function perfomrSearch()
+    {
+        $this->search['test'] = 'test';
+        if ($this->search) {
+            $this->subscriptions = Subscription::where('code', 'like', '%'.$this->search['code'].'%')
+                ->paginate(10);
+        }
+        $this->reset(['search']);
+        $this->render();
+    }
 
     public function toggleCanteen()
     {

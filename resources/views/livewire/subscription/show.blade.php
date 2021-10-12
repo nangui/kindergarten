@@ -8,10 +8,10 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- Filters -->
         <div class="w-full overflow-hidden px-4 py-5 bg-white sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md mb-8">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4">
+            <!--<h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4">
                 {{ __('Filtres') }}
             </h2>
-            <div class="flex flex-row space-y-0 space-x-4 mb-4">
+             <div class="flex flex-row space-y-0 space-x-4 mb-4">
                 <div class="w-1/3">
                     <x-jet-label for="code" value="{{ __('Code inscription') }}" />
                     <x-jet-input id="code" type="text" class="mt-1 block w-full" wire:model.defer="search.code" />
@@ -37,10 +37,10 @@
                     </datalist>
                 </div>
                 
-            </div>
-            <x-jet-button wire:click="" wire:loading.attr="disabled">
+            </div> 
+            <x-jet-button wire:click="perfomrSearch" wire:loading.attr="disabled">
                 {{ __('Filtrer') }}
-            </x-jet-button>
+            </x-jet-button>-->
         </div>
         <!-- End filters -->
 
