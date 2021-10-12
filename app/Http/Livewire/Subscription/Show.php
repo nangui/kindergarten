@@ -77,6 +77,7 @@ class Show extends Component
 
     public function saveSubscription()
     {
+
         if (!isset($this->newSubscription['year'])) {
             $this->addError('newSubscription.year', 'L\'année scolaire est obligatoire.');
         }
@@ -106,7 +107,7 @@ class Show extends Component
             }
         }
         $this->confirmingSubscriptionAdd = false;
-        if ($this->errorBag->isEmpty()) {            
+        if ($this->errorBag->isEmpty()) {   
             DB::beginTransaction();
             try {
                 $subscription = new Subscription;

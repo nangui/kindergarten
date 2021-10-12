@@ -7,8 +7,8 @@
 <div class="py-6">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- Filters -->
-        <div class="w-full overflow-hidden px-4 py-5 bg-white sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md mb-8">
-            <!--<h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4">
+        <!-- <div class="w-full overflow-hidden px-4 py-5 bg-white sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md mb-8">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4">
                 {{ __('Filtres') }}
             </h2>
              <div class="flex flex-row space-y-0 space-x-4 mb-4">
@@ -40,8 +40,8 @@
             </div> 
             <x-jet-button wire:click="perfomrSearch" wire:loading.attr="disabled">
                 {{ __('Filtrer') }}
-            </x-jet-button>-->
-        </div>
+            </x-jet-button>
+        </div> -->
         <!-- End filters -->
 
         <div class="w-full overflow-hidden px-4 py-5 bg-white sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
@@ -117,6 +117,11 @@
                 <div class="flex-1 pr-2">
                     <x-jet-label for="pupil" value="{{ __('Élève') }}" />
                     <x-jet-input list="pupils-list" type="text" id="pupil" class="mt-1 block w-full" wire:model.defer="newSubscription.pupil" />
+                    <datalist id="pupils-list">
+                        @foreach ($pupils as $pupil)
+                            <option value="{{ $pupil->first_name }} {{ $pupil->last_name }} ({{ $pupil->code }})" />
+                        @endforeach
+                    </datalist>
                 </div>
 
                 <div class="flex-1 pl-2">

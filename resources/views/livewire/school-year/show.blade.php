@@ -13,6 +13,7 @@
             <input wire:model="designation" id="year" type="text" name="school_year" class="mr-2 mb-2 w-4/6 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 shadow-sm" />
             @error('designation') <span class="block mb-2 text-sm text-red-600">{{ $message }}</span> @enderror
             <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent font-semibold text-xs text-white tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">Valider</button>
+            <small class="block text-gray-500 text-xs">Entrer l'année de début (Ex: 1980)</small>
         </form>
     </div>
 

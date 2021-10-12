@@ -124,16 +124,21 @@
         <x-slot name="content">
             <fieldset class="border border-solid border-gray-300 p-4 rounded-md">
                 <legend class="text-sm p-2">Informations personnelles</legend>
-                <div class="flex items-center justify-between">
+                <div class="pr-3">
+                    <x-jet-label for="code" value="{{ __('Code FA') }}" />
+                    <x-jet-input type="text" placeholder="Entrer le code FA" class="mt-1 block w-1/2" wire:model.defer="pupil.code" />
+                    <x-jet-input-error for="pupil.code" class="mt-2" />
+                </div>
+                <div class="flex items-center justify-between mt-4">
                     <div class="flex-1 pr-2">
                         <x-jet-label for="first_name" value="{{ __('Prénom') }}" />
-                        <x-jet-input id="first_name" type="text" class="mt-1 block w-full" wire:model.defer="pupil.first_name" />
+                        <x-jet-input id="first_name" placeholder="Entrer le prénom" type="text" class="mt-1 block w-full" wire:model.defer="pupil.first_name" />
                         <x-jet-input-error for="pupil.first_name" class="mt-2" />
                     </div>
 
                     <div class="flex-1 pl-2">
                         <x-jet-label for="last_name" value="{{ __('Nom') }}" />
-                        <x-jet-input id="last_name" type="text" class="mt-1 block w-full" wire:model.defer="pupil.last_name" />
+                        <x-jet-input id="last_name" type="text" placeholder="Entrer le nom" class="mt-1 block w-full" wire:model.defer="pupil.last_name" />
                         <x-jet-input-error for="pupil.last_name" class="mt-2" />
                     </div>
                 </div>

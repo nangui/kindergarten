@@ -18,7 +18,7 @@ class Show extends Component
     }
 
     protected $rules = [
-        'designation' => 'required|unique:school_years|min:9',
+        'designation' => 'required|unique:school_years|min:4',
     ];
 
     protected $messages = [
@@ -32,7 +32,7 @@ class Show extends Component
         $this->validate();
 
         SchoolYear::create([
-            'designation' => $this->designation,
+            'designation' => $this->designation . '-' . strval(intval($this->designation) + 1),
         ]);
         $this->designation = '';
         $this->emit('changed');

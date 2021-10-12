@@ -77,9 +77,6 @@ class Show extends Component
             $pupil = new Pupil;
             $pupil->fill($this->pupil);
             $pupil->genre = $this->pupil['genre'] ? 'M' : 'F';
-            $pupil->code = Str::snake(
-                Str::substr($pupil->first_name, 0, 3) . '-' . Str::substr($pupil->last_name, 0, 3)
-            );
             $pupil->save();
             session()->flash('message', 'Élève ajouté avec succès.');
         }
