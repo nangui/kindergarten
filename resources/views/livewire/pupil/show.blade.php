@@ -155,17 +155,15 @@
                     <x-jet-input-error for="pupil.birth_date" class="mt-2" />
                 </div>
                 <div class="mt-4">
-                    <x-native-select
-                        label="Tuteur"
-                        wire:model.defer="pupil.tutor_id"
-                    >
-                        <option value="">{{ __('Selectionnez le tuteur') }}</option>
+                    <x-jet-label for="tutor" value="{{ __('Selectionnez le tuteur') }}" />
+                    <x-jet-input list="tutors" type="text" id="tutor" class="mt-1 block w-full" wire:model.defer="pupil.tutor_id" />
+                    <datalist id="tutors">
                         @foreach ($tutors as $tutor)
                             <option value="{{$tutor->id}}">
-                                {{ $tutor->first_name }} {{ $tutor->last_name }}
+                                {{ $tutor->first_name }} {{ $tutor->last_name }} ({{ $tutor->phone1 }})
                             </option>
                         @endforeach
-                    </x-native-select>
+                    </datalist>
                 </div>
             </fieldset>
         </x-slot>

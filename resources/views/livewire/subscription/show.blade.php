@@ -116,7 +116,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex-1 pr-2">
                     <x-jet-label for="pupil" value="{{ __('Élève') }}" />
-                    <x-jet-input list="pupils-list" type="text" id="pupil" class="mt-1 block w-full" wire:model.defer="newSubscription.pupil" />
+                    <x-jet-input list="pupils-list" placeholder="Choisir l'élève" type="text" id="pupil" class="mt-1 block w-full" wire:model.defer="newSubscription.pupil" />
                     <datalist id="pupils-list">
                         @foreach ($pupils as $pupil)
                             <option value="{{ $pupil->first_name }} {{ $pupil->last_name }} ({{ $pupil->code }})" />
@@ -126,7 +126,7 @@
 
                 <div class="flex-1 pl-2">
                     <x-jet-label for="classe" value="{{ __('Classe') }}" />
-                    <x-jet-input list="school-classes-list" type="text" id="classe" class="mt-1 block w-full" wire:model.defer="newSubscription.class" />
+                    <x-jet-input list="school-classes-list" placeholder="Choisir la classe" type="text" id="classe" class="mt-1 block w-full" wire:model.defer="newSubscription.class" />
                     <datalist id="school-classes-list">
                         @foreach ($school_classes as $schoolClass)
                             <option value="{{ $schoolClass->designation }}" />
@@ -137,7 +137,7 @@
             <div class="flex items-center justify-between mt-4">
                 <div class="w-1/2 pr-2">
                     <x-jet-label for="year" value="{{ __('Année scolaire') }}" />
-                    <x-jet-input list="years-list" id="year" type="text" class="mt-1 block w-full" wire:model.defer="newSubscription.year" />
+                    <x-jet-input list="years-list" placeholder="Choisir l'année scolaire" id="year" type="text" class="mt-1 block w-full" wire:model.defer="newSubscription.year" />
                     <datalist id="years-list">
                         @foreach ($school_years as $year)
                             <option value="{{ $year->designation }}" />

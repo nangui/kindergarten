@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Pupil;
 use App\Models\Pupil;
 use App\Models\Tutor;
 use Livewire\Component;
-use Illuminate\Support\Str;
 use Livewire\WithPagination;
 
 class Show extends Component
