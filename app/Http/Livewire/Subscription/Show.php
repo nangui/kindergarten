@@ -31,6 +31,9 @@ class Show extends Component
     public $confirmingSubscriptionDeletion = false;
     public $confirmingSubscriptionAdd = false;
     private $subscriptions = [];
+    public $confirmingBilling = false;
+    public $billingDate;
+    public $billingYear;
 
     public function mount()
     {
@@ -48,6 +51,21 @@ class Show extends Component
             'canteens' => $this->getCanteens(),
             'transports' => $this->getTransports(),
         ]);
+    }
+
+    public function makeBill()
+    {
+        $year = SchoolYear::where('designation', $this->billingYear)->first();
+        $piecesOfDate = explode('-', $year->designation);
+        $piecesOfDate[0] = Carbon::create($piecesOfDate[0], 10, 1)->format('Y-m-d');
+        $piecesOfDate[1] = Carbon::create($piecesOfDate[1], 7, 31)->format('Y-m-d');
+
+        dd($this->billingDate, $piecesOfDate);
+
+        // 1 - Verifier si la periode de facturation est pris en compte 
+        // par l'année en cours puis si elle est pris en compte par a periode de validité 
+
+        // Pour imprimer, on choisi l'année scolaire, la classe et la periode
     }
 
     public function confirmSubscriptionAdd()

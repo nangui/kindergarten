@@ -45,9 +45,12 @@
         <!-- End filters -->
 
         <div class="w-full overflow-hidden px-4 py-5 bg-white sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">
-            <div class="pb-4 flex items-center">
+            <div class="pb-4 flex items-center justify-between">
                 <x-jet-button wire:click="confirmSubscriptionAdd" wire:loading.attr="disabled">
                     {{ __('Ajouter une inscription') }}
+                </x-jet-button>
+                <x-jet-button wire:click="$set('confirmingBilling', true)" wire:loading.attr="disabled">
+                    {{ __('Facturer') }}
                 </x-jet-button>
             </div>
             <div class="w-1/3">
@@ -225,6 +228,41 @@
             <x-jet-danger-button class="ml-2 rounded-none" wire:click="deleteSubscription({{ $confirmingSubscriptionDeletion }})" wire:loading.attr="disabled">
                 {{ __('Archiver') }}
             </x-jet-danger-button>
+        </x-slot>
+    </x-jet-confirmation-modal>
+
+    <!-- Biling modal -->
+    <x-jet-confirmation-modal wire:model="confirmingBilling">
+        <x-slot name="title">{{ __('Facturer') }}</x-slot>
+        <x-slot name="content">
+            <div class="flex items-center justify-between mt-4 w-full">
+                <div class="flex-1 pr-2">
+                    <x-jet-label for="billingDate" value="{{ __('Choisir une date') }}" />
+                    <x-jet-input
+                        id="billingDate"
+                        type="date"
+                        class="mt-1 block w-full"
+                        wire:model.defer="billingDate"
+                    />
+                </div>
+                <div class="flex-1 pr-2">
+                    <x-jet-label for="years" value="Choisir l'année scolaire" />
+                    <x-jet-input placeholder="Choisir l'année scolaire" list="school_years_list" id="years" type="text" class="mt-1 block w-full" wire:model.defer="billingYear" />
+                    <datalist id="school_years_list">
+                        @foreach ($school_years as $school_year)
+                            <option>{{ $school_year->designation }}</option>
+                        @endforeach                
+                    </datalist>
+                </div>
+            </div>
+        </x-slot>
+        <x-slot name="footer">
+            <x-jet-secondary-button class="rounded-none" wire:click="$set('confirmingBilling', false)" wire:loading.attr="disabled">
+                {{ __('Annuler') }}
+            </x-jet-secondary-button>
+            <x-jet-button class="ml-2 rounded-none" wire:click="makeBill()" wire:loading.attr="disabled">
+                {{ __('Proceder') }}
+            </x-jet-button>
         </x-slot>
     </x-jet-confirmation-modal>
 </div>

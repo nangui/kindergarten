@@ -18,4 +18,9 @@ class CanteenValidity extends Model
     {
         return Carbon::parse($this->created_at)->toFormattedDateString();
     }
+
+    public function endDateToForamettedDateString()
+    {
+        return $this->updated_at ? Carbon::parse($this->updated_at)->toFormattedDateString() : null;
+    }
 }

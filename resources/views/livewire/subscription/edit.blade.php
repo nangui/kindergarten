@@ -34,7 +34,8 @@
                     <div class="flex items-center justify-between mt-6 mb-6">
                         <div class="flex-1 pr-2">
                             <p class="text-lg">
-                                Cantine: <span class="font-bold text-xl">{{ $subscription->canteen->designation }}</span></p>
+                                Cantine: <span class="font-bold text-xl">{{ $subscription->canteen->designation }}</span>
+                            </p>
                         </div>
                         <div class="flex-1">
                             <p class="text-lg">
@@ -85,11 +86,18 @@
             </fieldset>
             <fieldset class="border border-solid border-gray-300 p-4 rounded-md mt-8">
                 <legend class="text-sm p-2">Informations sur les validités</legend>
-                <div class="flex items-center justify-between gap-4">
+                <div class="flex justify-between gap-4">
                     <div class="flex-1">
-                        <h2 class="font-semibold text-lg text-gray-800 leading-tight">
-                            {{ __('Validité(s) cantine(s)') }}
-                        </h2>
+                        <div class="flex items-center justify-between">
+                            <h2 class="font-semibold text-lg text-gray-800 leading-tight">
+                                {{ __('Validité(s) cantine(s)') }}
+                            </h2>
+                            @if ($canteenValidities[0]->updated_at)
+                                <x-jet-button wire:click="setValidityAddValue('canteen')" wire:loading.attr="disabled">
+                                    {{ __('Activer cantine') }}
+                                </x-jet-button>
+                            @endif
+                        </div>
                         <table class="min-w-full divide-y divide-gray-200 mt-4">
                             <thead>
                                 <tr>
@@ -105,7 +113,7 @@
                                             {{ $validity->dateToFormattedDateString() }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                                            {{ $validity->updated_at }}
+                                            {{ $validity->endDateToForamettedDateString() ?? '/' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
                                             @if (!$validity->updated_at)
@@ -113,7 +121,7 @@
                                                 {{ __('Résilier') }}
                                             </x-jet-danger-button>
                                             @else
-                                                <span class="text-red-500">Cloturée</span>
+                                                <span class="text-red-300">Cloturée</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -122,9 +130,16 @@
                         </table>
                     </div>
                     <div class="flex-1">
-                        <h2 class="font-semibold text-lg text-gray-800 leading-tight">
-                            {{ __('Validité(s) transport(s)') }}
-                        </h2>
+                        <div class="flex items-center justify-between">
+                            <h2 class="font-semibold text-lg text-gray-800 leading-tight">
+                                {{ __('Validité(s) transport(s)') }}
+                            </h2>
+                            @if ($transportValidities[0]->updated_at)
+                                <x-jet-button wire:click="setValidityAddValue('transport')" wire:loading.attr="disabled">
+                                    {{ __('Activer transport') }}
+                                </x-jet-button>
+                            @endif
+                        </div>
                         <table class="min-w-full divide-y divide-gray-200 mt-4">
                             <thead>
                                 <tr>
@@ -140,7 +155,7 @@
                                             {{ $validity->dateToFormattedDateString() }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                                            {{ $validity->updated_at }}
+                                            {{ $validity->endDateToForamettedDateString() ?? '/' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
                                             @if (!$validity->updated_at)
@@ -148,7 +163,7 @@
                                                 {{ __('Résilier') }}
                                             </x-jet-danger-button>
                                             @else
-                                                <span class="text-red-500">Cloturée</span>
+                                                <span class="text-red-300">Cloturée</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -160,4 +175,27 @@
             </fieldset>
         </div>
     </div>
+
+    <x-jet-confirmation-modal wire:model="confirmingValidityAdd" id="addValidityModal">
+        <x-slot name="title">{{ __('Activer') }} {{ $isTransport ? 'Transport' : 'Cantine' }} </x-slot>
+        <x-slot name="content">
+            <div class="flex items-center justify-between mt-4">
+                <div class="flex-1">
+                    <x-jet-label for="validityDate" value="{{ __('Date début validité') }}" />
+                    <x-jet-input
+                        id="validityDate"
+                        type="date"
+                        class="mt-1 block w-full"
+                        wire:model.defer="dateValidity"
+                    />
+                </div>
+            </div>
+        </x-slot>
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="setValidityAddValue('close')" wire:loading.attr="disabled">
+                {{ __('Annuler') }}
+            </x-jet-secondary-button>
+            <x-jet-button class="ml-2" wire:click="confirmValidityAdd()">{{ __('Enregistrer') }}</x-jet-button>
+        </x-slot>
+    </x-jet-confirmation-modal>
 </div>

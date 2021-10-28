@@ -18,6 +18,10 @@ class Edit extends Component
     public $canteenValidities;
     public $transportValidities;
     public $newSubscription;
+    public $confirmingValidityAdd = false;
+    public $isCanteen = false;
+    public $isTransport = false;
+    public $dateValidity;
     public $editMode = false;
 
     public function mount($id)
@@ -27,8 +31,8 @@ class Edit extends Component
             ->load('school_class')
             ->load('canteen')
             ->load('transport');
-        $this->canteenValidities = CanteenValidity::where('subscription_id', $id)->get();
-        $this->transportValidities = TransportValidity::where('subscription_id', $id)->get();
+        $this->canteenValidities = CanteenValidity::where('subscription_id', $id)->orderBy('id', 'desc')->get();
+        $this->transportValidities = TransportValidity::where('subscription_id', $id)->orderBy('id', 'desc')->get();
     }
 
     public function render()
@@ -72,6 +76,54 @@ class Edit extends Component
             : $this->subscription->canteenValidities()->find($id);
         $validity->updated_at = now();
         $validity->save();
+    }
+
+    public function confirmValidityAdd()
+    {
+        $isBefore = true;
+        if ($this->isTransport) {
+            $isBefore = $this->dateValidity < $this->transportValidities[0]->updated_at;
+        }
+
+        if ($this->isCanteen) {
+            $isBefore = $this->dateValidity < $this->canteenValidities[0]->updated_at;
+        }
+
+        if (!$isBefore) {
+            if ($this->isTransport) {
+                TransportValidity::create([
+                    'subscription_id' => $this->subscription->id,
+                    'created_at' => $this->dateValidity,
+                ]);
+                $this->transportValidities = TransportValidity::where('subscription_id', $this->subscription->id)->orderBy('id', 'desc')->get();
+            }
+            if ($this->isCanteen) {
+                CanteenValidity::create([
+                    'subscription_id' => $this->subscription->id,
+                    'created_at' => $this->dateValidity,
+                ]);
+                $this->canteenValidities = CanteenValidity::where('subscription_id', $this->subscription->id)->orderBy('id', 'desc')->get();
+            }
+        }
+        $this->isTransport = false;
+        $this->isCanteen = false;
+        $this->confirmingValidityAdd = !$this->confirmingValidityAdd;
+        $this->render();
+    }
+
+    public function setValidityAddValue($value)
+    {
+        if ($value === 'transport') {
+            $this->isTransport = true;
+            $this->isCanteen = false;
+        } else if ($value === 'canteen') {
+            $this->isCanteen = true;
+            $this->isTransport = false;
+        } else {
+            $this->isTransport = false;
+            $this->isCanteen = false;
+        }
+        $this->confirmingValidityAdd = !$this->confirmingValidityAdd;
     }
 
     public function redirectBack()
