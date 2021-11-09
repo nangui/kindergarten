@@ -45,6 +45,11 @@ class Subscription extends Model
         return $this->belongsTo('App\Models\Transport');
     }
 
+    public function invoices()
+    {
+        return $this->hasMany('App\Models\Invoice');
+    }
+
     public function canteenValidities()
     {
         return $this->hasMany('App\Models\CanteenValidity');

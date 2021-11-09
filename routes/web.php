@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Livewire\Invoice\Show as InvoiceShow;
+use App\Http\Livewire\Regulation\Show as RegulationShow;
 use App\Http\Livewire\Tutor\Show as TutorShow;
 use App\Http\Livewire\Pupil\Show as PupilShow;
 use App\Http\Livewire\Subscription\Show as SubscriptionShow;
@@ -40,5 +42,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/subscriptions', SubscriptionShow::class)->name('subscription.list');
         Route::get('/subscriptions/{id}', SubscriptionEdit::class)->name('subscription.edit');
         Route::get('/settings', SettingShow::class)->name('settings');
+        Route::get('/invoices', InvoiceShow::class)->name('invoice.list');
+        Route::get('/regulation', RegulationShow::class)->name('regulation.list');
     });
 });

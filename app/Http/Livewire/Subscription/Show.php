@@ -55,17 +55,67 @@ class Show extends Component
 
     public function makeBill()
     {
+        session()->flush();
         $year = SchoolYear::where('designation', $this->billingYear)->first();
         $piecesOfDate = explode('-', $year->designation);
-        $piecesOfDate[0] = Carbon::create($piecesOfDate[0], 10, 1)->format('Y-m-d');
-        $piecesOfDate[1] = Carbon::create($piecesOfDate[1], 7, 31)->format('Y-m-d');
+        $count = 0;
+        $piecesOfDate[0] = Carbon::create($piecesOfDate[0], 10, 1);
+        $piecesOfDate[1] = Carbon::create($piecesOfDate[1], 7, 31);
+        $subscriptions = Subscription::with(['invoices' => function ($query) use ($piecesOfDate) {
+            $query
+                ->whereBetween('period', [$piecesOfDate[0], $piecesOfDate[1]])
+                ->orderBy('created_at', 'desc');
+        }])->get();
 
-        dd($this->billingDate, $piecesOfDate);
+        $this->billingDate = new Carbon($this->billingDate);
 
-        // 1 - Verifier si la periode de facturation est pris en compte 
-        // par l'année en cours puis si elle est pris en compte par a periode de validité 
+        // 1 - Verifier si la periode de facturation est pris en compte par l'année en cours
+        $isBillinPeriodIncluded = $this->billingDate->between($piecesOfDate[0], $piecesOfDate[1]);
+
+        // 2 - Vérifier si le mois de la date de facturation est inférieur ou égale au mois actuel
+        $isBillinMonthLowerOrEqualToCurrentMonth = $this->billingDate->month <= Carbon::now()->month;
+
+        // 3 - Créer des facturations pour des élèves qui n'ont pas de facturation pour la période de facturation
+        if ($isBillinPeriodIncluded && $isBillinMonthLowerOrEqualToCurrentMonth) {
+            $subscriptions->map(function ($subscription) use (&$count) {
+                $invoice = $subscription->invoices->first();
+                $hasInvoice = $invoice !== null;
+                $hasCanteen = $subscription->canteen_id !== null;
+                $hasTransport = $subscription->transport_id !== null;
+
+                $canteenValidityUpdatedAt = $subscription
+                    ->canteenValidities()
+                    ->orderBy('id', 'desc')->first()->updated_at;
+
+                $transportValidityUpdatedAt = $subscription
+                    ->transportValidities()
+                    ->orderBy('id', 'desc')->first()->updated_at;
+
+                $isCanteenActive = 
+                    $hasCanteen && !$canteenValidityUpdatedAt ?? null;
+
+                $isTransportActive = 
+                    $hasTransport && !$transportValidityUpdatedAt ?? null;
+
+                if ($hasInvoice === false && ($hasCanteen || $hasTransport)) {
+                    
+                    $createdInvoice = $subscription->invoices()->create([
+                        'date' => Carbon::now(),
+                        'period' => $this->billingDate,
+                        'hasCanteen' => $isCanteenActive,
+                        'canteen_pay' => $isCanteenActive ? $subscription->canteen->monthly_payment : 0,
+                        'hasTransport' => $isTransportActive,
+                        'transport_pay' => $isTransportActive ? $subscription->transport->monthly_payment : 0,
+                    ]);
+                    $count += 1;
+                }
+            });
+            session()->flash('message', "$count facture(s) générée(s).");
+        }
+        $this->confirmingBilling = false;
 
         // Pour imprimer, on choisi l'année scolaire, la classe et la periode
+        session()->flash('error', 'Il n\'y a aucune fature a généré.');
     }
 
     public function confirmSubscriptionAdd()

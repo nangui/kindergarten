@@ -12,4 +12,9 @@ class Transport extends Model
     use HasSubscriptions;
 
     protected $fillable = ['zone', 'inscription', 'monthly_payment', 'comment'];
+
+    public function validities()
+    {
+        return $this->hasMany(TransportValidity::class);
+    }
 }

@@ -12,4 +12,9 @@ class Canteen extends Model
     use HasSubscriptions;
 
     protected $fillable = ['designation', 'inscription', 'monthly_payment'];
+
+    public function validities()
+    {
+        return $this->hasMany(CanteenValidity::class);
+    }
 }
