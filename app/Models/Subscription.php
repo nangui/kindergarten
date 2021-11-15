@@ -64,4 +64,18 @@ class Subscription extends Model
     {
         return Carbon::parse($this->date)->toFormattedDateString();
     }
+
+    public function getDebtAttribute()
+    {
+        $invoiceId = $this->invoices()->latest()->first()->id;
+
+        $invoices = $this->invoices->filter(function ($item) use ($invoiceId) {
+            return $item->is_paid == false && $invoiceId !== $item->id;
+        });
+        $sum = 0;
+        $invoices->each(function ($item) use (&$sum) {
+            $sum += $item->total;
+        });
+        return $sum;
+    }
 }

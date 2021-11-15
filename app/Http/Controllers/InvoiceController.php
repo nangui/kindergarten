@@ -3,83 +3,49 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\SchoolClass;
+use App\Models\SchoolYear;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
+use Carbon\Carbon;
 
 class InvoiceController extends Controller
 {
+    public $invoices;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function download($date, $year, $class)
     {
-        //
+        $this->getInvoices($date, $year, $class);
+
+        return PDF::loadView('livewire.invoice.preview', [
+            'invoices' => $this->invoices,
+        ])->stream();
+
+        // $name = 'factures_' . $date . '.pdf';
+
+        // return response()->streamDownload(
+        //     fn () => print($pdf),
+        //     $name
+        // );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    private function getInvoices($date, $year, $class)
     {
-        //
-    }
+        $date = Carbon::parse($date);
+        $yearInstance = SchoolYear::where('designation', $year)->first();
+        $classInstance = SchoolClass::where('designation', $class)->first();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $this->invoices = Invoice::with('subscription')
+            ->whereMonth('period', $date->month)
+            ->get();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Invoice $invoice)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Invoice $invoice)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Invoice $invoice)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Invoice $invoice)
-    {
-        //
+        $this->invoices = $this->invoices->filter(function ($invoice) use ($yearInstance, $classInstance) {
+            return $invoice->subscription->school_year_id == $yearInstance->id &&
+                $invoice->subscription->school_class_id == $classInstance->id;
+        });
     }
 }

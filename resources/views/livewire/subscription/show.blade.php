@@ -87,7 +87,7 @@
                 @endif
             </div>
 
-            <x-errors title="Il y a {errors} erreur(s) de validation"  />
+            <x-errors title="Il y a {errors} erreur(s) de validation" />
 
             <table class="min-w-full divide-y divide-gray-200 mt-4">
                 <thead class="bg-gray-50">

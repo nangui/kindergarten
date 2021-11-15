@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Subscription;
 
 use App\Models\Canteen;
 use App\Models\CanteenValidity;
+use App\Models\InvoiceNumber;
 use App\Models\Pupil;
 use App\Models\SchoolClass;
 use App\Models\SchoolYear;
@@ -55,7 +56,6 @@ class Show extends Component
 
     public function makeBill()
     {
-        session()->flush();
         $year = SchoolYear::where('designation', $this->billingYear)->first();
         $piecesOfDate = explode('-', $year->designation);
         $count = 0;
@@ -107,7 +107,24 @@ class Show extends Component
                         'hasTransport' => $isTransportActive,
                         'transport_pay' => $isTransportActive ? $subscription->transport->monthly_payment : 0,
                     ]);
-                    $count += 1;
+                    $lastInvoiceNumber = InvoiceNumber::orderBy('id', 'desc')->first();
+                    $lastNumber = 0;
+
+                    if ($lastInvoiceNumber) {
+                        if ($lastInvoiceNumber->created_at->year === (new Carbon())->year) {
+                            $lastNumber = $lastInvoiceNumber->number + 1;
+                            $lastInvoiceNumber->update([
+                                'number' => $lastNumber,
+                            ]);
+                            $lastInvoiceNumber->save();
+                        } else {
+                            InvoiceNumber::create([
+                                'number' => $lastNumber,
+                                'invoice_id' => $createdInvoice->id,
+                            ]);
+                        }
+                    }
+                    $count++;
                 }
             });
             session()->flash('message', "$count facture(s) générée(s).");

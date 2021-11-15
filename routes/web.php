@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\InvoiceController;
 use App\Http\Livewire\Invoice\Show as InvoiceShow;
+use App\Http\Livewire\Invoice\Preview as InvoicePreview;
 use App\Http\Livewire\Regulation\Show as RegulationShow;
 use App\Http\Livewire\Tutor\Show as TutorShow;
 use App\Http\Livewire\Pupil\Show as PupilShow;
@@ -43,6 +45,8 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/subscriptions/{id}', SubscriptionEdit::class)->name('subscription.edit');
         Route::get('/settings', SettingShow::class)->name('settings');
         Route::get('/invoices', InvoiceShow::class)->name('invoice.list');
+        Route::get('/invoices/download/{date}/{year}/{class}', [InvoiceController::class, 'download'])->name('invoice.download');
+        Route::get('/invoices/preview/{date}/{year}/{class}', InvoicePreview::class)->name('invoice.preview');
         Route::get('/regulation', RegulationShow::class)->name('regulation.list');
     });
 });
