@@ -5,18 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
-        <!-- Styles -->
-        @include('style')
-        <style>
-          .page-break {
-            page-break-after: always;
-          }
-        </style>
 
         @livewireStyles
 
@@ -24,13 +18,11 @@
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
-    <body class="font-sans antialiased">
+    <body style="font-size: 12pt;">
 
-        <!-- Page Content -->
-        <main>
-          {{ $slot }}
-        </main>
+      <!-- Page Content -->
+      {{ $slot }}
 
-        @livewireScripts
+      @livewireScripts
     </body>
 </html>

@@ -66,12 +66,12 @@
             <div class="w-full flex justify-between items-center mb-8">
                 <p>Nombre de facture trouvée(s): <span class="font-bold">{{ count($invoices) }}</span></p>
                 @if (count($invoices) > 0)
-                    <!-- <a href="{{ route('invoice.download', ['date' => $search['date'], 'year' => $search['year'], 'class' => $search['class']]) }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent font-semibold text-xs text-white tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
-                        {{ __('Exporter') }} les {{ count($invoices) }} factures
-                    </a> -->
-                    <a href="{{ route('invoice.preview', ['date' => $search['date'], 'year' => $search['year'], 'class' => $search['class']]) }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent font-semibold text-xs text-white tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
+                    <a target="_blank" href="{{ route('invoice.download', ['date' => $search['date'], 'year' => $search['year'], 'class' => $search['class']]) }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent font-semibold text-xs text-white tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
                         {{ __('Exporter') }} les {{ count($invoices) }} factures
                     </a>
+                    <!-- <a href="{{ route('invoice.preview', ['date' => $search['date'], 'year' => $search['year'], 'class' => $search['class']]) }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent font-semibold text-xs text-white tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
+                        {{ __('Exporter') }} les {{ count($invoices) }} factures
+                    </a> -->
                 @endif
             </div>
             <div class="pb-4 flex items-center">
@@ -84,11 +84,6 @@
                         </span>
                     </div>
                 @endif
-                <div class="w-full flex flex-col items-center gap-4">
-                    @foreach ($invoices as $invoice)
-                        <x-invoice-content :invoice="$invoice" />
-                    @endforeach
-                </div>
             </div>
         </div>
     </div>

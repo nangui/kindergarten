@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\SchoolClass;
 use App\Models\SchoolYear;
-use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
+use PDF;
 
 class InvoiceController extends Controller
 {
@@ -23,14 +22,8 @@ class InvoiceController extends Controller
 
         return PDF::loadView('livewire.invoice.preview', [
             'invoices' => $this->invoices,
+            'isPreview' => false,
         ])->stream();
-
-        // $name = 'factures_' . $date . '.pdf';
-
-        // return response()->streamDownload(
-        //     fn () => print($pdf),
-        //     $name
-        // );
     }
 
     private function getInvoices($date, $year, $class)

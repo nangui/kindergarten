@@ -63,18 +63,4 @@ class Show extends Component
 
         return $invoices;
     }
-
-    // public function download()
-    // {
-    //     $pdf = PDF::loadView('livewire.invoice.preview', [
-    //         'invoices' => $this->invoices,
-    //     ])->output();
-
-    //     $name = 'factures_' . $this->search['date'] . '.pdf';
-
-    //     return $pdf->stream(
-    //         fn () => print($pdf),
-    //         $name
-    //     );
-    // }
 }

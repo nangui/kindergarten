@@ -47,7 +47,7 @@ class Preview extends Component
 
     public function download()
     {
-        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $this->isPreview = false;
         $pdf = PDF::loadView('livewire.invoice.preview', [
             'invoices' => $this->invoices,
             'isPreview' => false,
@@ -55,10 +55,6 @@ class Preview extends Component
 
         $name = 'factures_' . $this->date . '.pdf';
 
-        // return response()->streamDownload(
-        //     fn () => print($pdf),
-        //     $name
-        // );
-        return $pdf->stream($name);
+        return $pdf->download($name);
     }
 }

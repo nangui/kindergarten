@@ -56,6 +56,7 @@ class Show extends Component
 
     public function makeBill()
     {
+        // I'm here and I must understand this function before leave to the last part
         $year = SchoolYear::where('designation', $this->billingYear)->first();
         $piecesOfDate = explode('-', $year->designation);
         $count = 0;
@@ -120,19 +121,24 @@ class Show extends Component
                         } else {
                             InvoiceNumber::create([
                                 'number' => $lastNumber,
-                                'invoice_id' => $createdInvoice->id,
                             ]);
                         }
+                    } else {
+                        InvoiceNumber::create([
+                            'number' => $lastNumber,
+                        ]);
                     }
+                    $createdInvoice->update([
+                        'code' => $lastNumber,
+                    ]);
                     $count++;
                 }
             });
             session()->flash('message', "$count facture(s) générée(s).");
+        } else {
+            session()->flash('error', 'Il n\'y a aucune fature a généré.');
         }
         $this->confirmingBilling = false;
-
-        // Pour imprimer, on choisi l'année scolaire, la classe et la periode
-        session()->flash('error', 'Il n\'y a aucune fature a généré.');
     }
 
     public function confirmSubscriptionAdd()

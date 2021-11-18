@@ -1,93 +1,116 @@
-<div class="w-full border p-2 rounded">
-    <!-- Smile, breathe, and go slowly. - Thich Nhat Hanh -->
-    <div class="w-full flex items-center mb-18 space-x-64">
-        <div class="flex flex-col font-bold uppercase p-16">
-            <p>College Anne-marie javouhey</p>
-            <p>Avenue Cheikh anta Diop</p>
-            <p>B.P. 7035 - Dakar-Medina</p>
-            <p>** Facture {{ Carbon\Carbon::parse($invoice->created_at)->monthName }} {{ Carbon\Carbon::now()->format('Y') }}</p>
-        </div>
-        <div class="flex flex-col p-16">
-            <p><span class="font-bold">Nom responsable: </span>{{ $invoice->subscription->pupil->tutor_full_name }}</p>
-            <p><span class="font-bold">Nom élève: </span>{{ $invoice->subscription->pupil->full_name }}</p>
-            <!-- <p><span class="font-bold">Adresse: </span>Lycée de lafosse</p> -->
-        </div>
-    </div>
-
-    <table class="w-full border divide-x divide-y divide-gray-200 border-collapse">
-        <thead class="bg-gray-100">
-            <tr>
-                <th class="px-6 py-3 text-xs font-medium uppercase tracking-wider" colspan="4">
-                    <div class="w-full flex justify-between">
-                        <p>{{ $invoice->subscription->school_class->designation }}</p>
-                        <p class="font-bold">{{ $invoice->subscription->pupil->full_name }}</p>
-                        <p class="pl-16">{{ $invoice->code->number }}</p>
-                    </div>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="flex h-96 divide-x divide-y divide-gray-200">
-                <td class="w-2/5 px-6 py-4 whitespace-nowrap flex">
-                    <p class="uppercase">Transport / Cantine</p>
-                </td>
-                <td style="width: 10%;" class="px-6 py-4 whitespace-nowrap flex">
-                    <p class="w-full uppercase text-right">{{ number_format($invoice->total, 0, '.', ' ') }}</p>
-                </td>
-                <td class="w-2/5 px-6 py-4 whitespace-nowrap flex"></td>
-                <td style="width: 10%;" class="px-6 py-4 whitespace-nowrap flex"></td>
-            </tr>
-            <tr class="flex">
-                <td style="width: 90%;" colspan="3" class="border px-6 py-4 whitespace-nowrap">
-                    <div class="w-full">
-                        <p class="font-bold">TOTAL {{ $invoice->subscription->pupil->full_name }}</p>
-                        <p>SOLDE PRECEDENT</p>
-                        <p class="uppercase">Facture *Obligatoire* Pour le reglement</p>
-                        <div class="w-full flex justify-between uppercase">
-                            <p>A payer avant le 10 du mois</p>
-                            <p class="font-bold">A payer</p>
-                        </div>
+<div style="width: 1120px;border:1px solid rgb(229, 231, 235);">
+    <table class="table-fixed" autosize="2" style="width:1120px;border:1px solid rgb(229, 231, 235);border-collapse: collapse;text-indent: 0;">
+        <thead>
+            <tr style="width: 1120px;">
+                <td colspan="2" style="position: relative;padding-top: 1rem;padding-bottom: 1rem;padding-right:1.5rem;padding-left:1.5rem;white-space: nowrap;">
+                    <div style="padding:64px;float: left;">
+                        <h2 style="font-weight:bold;font-size: 1.5em;">College Anne-marie javouhey</h2>
+                        <p style="width:400px;" class="font-bold">
+                            Avenue Cheikh anta Diop<br>
+                            B.P. 7035 - Dakar-Medina<br>
+                            ** Facture {{ Carbon\Carbon::parse($invoice->created_at)->monthName }} {{ Carbon\Carbon::now()->format('Y') }}<br>
+                        </p>
                     </div>
                 </td>
-                <td style="width: 10%;" class="whitespace-nowrap border-t border-b">
-                    <div class="w-full px-6 pt-4 pb-2">
-                        <p>{{ number_format($invoice->total, 0, '.', ' ') }}</p>
-                        <p class="font-bold">{{ $invoice->subscription->debt }}</p>
-                    </div>
-                    <div class="w-full px-6 pb-4 pt-2 border-t">
-                        <p class="font-bold total">
-                            {{ number_format($invoice->total + $invoice->subscription->debt, 0, '.', ' ') }}
+                <td style="position: relative;padding-top: 1rem;padding-bottom: 1rem;padding-right:1.5rem;padding-left:1.5rem;white-space: nowrap;">
+                    <div style="padding:64px;padding-left: 300px;float: right;">
+                        <p>
+                            <span style="font-weight: bold;">Nom responsable</span>
+                            {{ $invoice->subscription->pupil->tutor_full_name }}
+                        </p>
+                        <p>
+                            <span style="font-weight: bold;">Nom élève: </span>
+                            {{ $invoice->subscription->pupil->full_name }}
                         </p>
                     </div>
                 </td>
             </tr>
-        </tbody>
-        <tfoot class="divide-x divide-y divide-gray-200">
-            <tr class="flex">
-                <td style="width: 90%;" colspan="3" class="px-6 py-4 whitespace-nowrap">
-                    <div class="w-full">
-                        <div class="flex gap-2">
-                            <!-- <p>FA17/401</p> -->
-                            <!-- <p>CHQ</p> -->
-                            <p>{{ $invoice->created_at->format('d/m/y') }}</p>
-                        </div>
-                        <div class="w-full flex justify-between items-center">
-                            <div class="flex">
-                                <p class="uppercase pr-6">A payer</p>
-                                <p>
-                                    <span class="font-bold">
-                                        {{ number_format($invoice->total + $invoice->subscription->debt, 0, '.', ' ') }}
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="flex">
-                                <p>{{ $invoice->code->number }}</p>
-                                <p class="pl-6">{{ $invoice->created_at->format('d/m/Y') }}</p>
-                            </div>
-                        </div>
+        </thead>
+        <tbody>
+            <tr style="width:1120px;background-color: rgb(243, 244, 246);">
+                <td style="letter-spacing: 0.05em;font-size: 0.75rem;line-height: 16px;font-weight: 500;text-transform: uppercase;padding-top: 0.75rem;padding-bottom: 0.75rem;padding-left: 1.5rem;padding-right: 1.5rem;">
+                    <div class="row" style="width:100%;color:#000;">
+                        <p class="column">{{ $invoice->subscription->school_class->designation }}</p>
                     </div>
                 </td>
-                <td style="width: 10%;">&nbsp;</td>
+                <td colspan="2" style="letter-spacing: 0.05em;font-size: 0.75rem;line-height: 16px;font-weight: 500;text-transform: uppercase;padding-top: 0.75rem;padding-bottom: 0.75rem;padding-left: 1.5rem;padding-right: 1.5rem;">
+                    <div class="row" style="width:100%;color:#000;">
+                        <p class="column" style="font-weight: bold;">{{ $invoice->subscription->pupil->full_name }}</p>
+                    </div>
+                </td>
+                <td style="letter-spacing: 0.05em;font-size: 0.75rem;line-height: 16px;font-weight: 500;text-transform: uppercase;padding-top: 0.75rem;padding-bottom: 0.75rem;padding-left: 1.5rem;padding-right: 1.5rem;">
+                    <div class="row" style="width:100%;color:#000;">
+                        <p class="column" style="padding-left:64px;">{{ $invoice->code }}</p>
+                    </div>
+                </td>
+            </tr>
+            <tr style="width:1120px;display:flex;">
+                <td style="height:300px;display: flex;border-left:1px solid rgb(229, 231, 235);width:40%;padding-top: 1rem;padding-bottom: 1rem;padding-right:1.5rem;padding-left:1.5rem;white-space: nowrap;">
+                    <p style="text-transform: uppercase;">Transport / Cantine</p>
+                </td>
+                <td style="border-left:1px solid rgb(229, 231, 235);height:300px;width: 10%;display: flex;padding-top: 1rem;padding-bottom: 1rem;padding-right:1.5rem;padding-left:1.5rem;white-space: nowrap;">
+                    <p style="width: 100%;text-transform: uppercase;text-align: right;">{{ number_format($invoice->total, 0, '.', ' ') }}</p>
+                </td>
+                <td style="height:300px;display: flex;border-left:1px solid rgb(229, 231, 235);width:40%;padding-top: 1rem;padding-bottom: 1rem;padding-right:1.5rem;padding-left:1.5rem;white-space: nowrap;">&nbsp;</td>
+                <td style="height:300px;display: flex;border-left:1px solid rgb(229, 231, 235);width:10%;padding-top: 1rem;padding-bottom: 1rem;padding-right:1.5rem;padding-left:1.5rem;white-space: nowrap;">&nbsp;</td>
+            </tr>
+            <tr style="width:1120px;display:flex;">
+                <td style="border-top:1px solid rgb(229, 231, 235);width: 90%;padding-top: 1rem;padding-right:1.5rem;padding-left:1.5rem;white-space: nowrap;" colspan="3">
+                    <p style="font-weight: bold;">TOTAL {{ $invoice->subscription->pupil->full_name }}</p>
+                </td>
+                <td style="border-left:1px solid rgb(229,231,235);border-top:1px solid rgb(229,231,235);padding-left:1.5rem;">
+                    <p>{{ number_format($invoice->total, 0, '.', ' ') }}</p>
+                </td>
+            </tr>
+            <tr style="width:1120px;display:flex;">
+                <td style="width: 90%;padding-right:1.5rem;padding-left:1.5rem;white-space: nowrap;" colspan="3">
+                    <p>SOLDE PRECEDENT</p>
+                </td>
+                <td style="border-left:1px solid rgb(229,231,235);padding-left:1.5rem;">
+                    <p style="font-weight:bold;">{{ $invoice->subscription->debt }}</p>
+                </td>
+            </tr>
+            <tr style="width:1120px;">
+                <td colspan="3" style="padding-left:1.5rem;">
+                    <p style="text-transform:uppercase;">Facture *obligatoire* pour le reglement</p>
+                </td>
+                <td style="border-left:1px solid rgb(229,231,235);">&nbsp;</td>
+            </tr>
+            <tr style="width:1120px;display:flex;">
+                <td style="border-bottom:1px solid rgb(229,231,235);padding-bottom: 1rem;padding-right:1.5rem;padding-left:1.5rem;white-space: nowrap;" colspan="2">
+                    <p style="text-transform: uppercase;">A payer avant le 10 du mois</p>
+                </td>
+                <td style="border-bottom:1px solid rgb(229,231,235);text-align:right;padding-right:1.5rem;">
+                    <p style="font-weight: bold;">A payer</p>
+                </td>
+                <td style="border-left:1px solid rgb(229,231,235);border-bottom:1px solid rgb(229,231,235);border-left:1px solid rgb(229,231,235);padding:1.5rem;">
+                    <p style="font-weight: bold;" class="total">
+                        {{ number_format($invoice->total + $invoice->subscription->debt, 0, '.', ' ') }}
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td style="border-top:1px solid rgb(229, 231, 235);border-left:1px solid rgb(229, 231, 235);padding-top: 1rem;padding-bottom: 1rem;padding-right:1.5rem;padding-left:1.5rem;white-space: nowrap;" colspan="4">
+                    <p>{{ $invoice->created_at->format('d/m/y') }}</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-left: 1.5rem;padding-bottom:1.5rem;">
+                    <p style="text-transform: uppercase;">A Payer</p>
+                </td>
+                <td>
+                    <p style="font-weight: bold;">
+                        {{ number_format($invoice->total + $invoice->subscription->debt, 0, '.', ' ') }}
+                    </p>
+                </td>
+                <td style="padding-right: 1.5rem;text-align:right;">
+                    <p>{{ $invoice->code }}</p>
+                </td>
+                <td>
+                    <p style="padding-left: 4rem;">{{ $invoice->created_at->format('d/m/Y') }}</p>
+                </td>
             </tr>
         </tfoot>
     </table>
