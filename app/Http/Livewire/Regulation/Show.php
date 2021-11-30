@@ -34,39 +34,54 @@ class Show extends Component
 
     public function pay()
     {
-        $dept = $this->invoice->subscription->debt;
+        $subscription = $this->invoice->subscription;
+        $dept = $subscription->debt;
 
-        if ($dept > 0) {
-            $subscription = $this->pupil->subscriptions()->latest()->first()->load('invoices');
-            $oldestUnpaidInvoice = $subscription
-                ->invoices()
-                ->where('id', '<>', $this->invoice->id)
-                ->oldest()
-            ->first();
-
-            while ($dept > 0) {
-                
-            }
-
-            // if ($this->amount <= $oldestUnpaidInvoice->amount) {
-            //     $oldestUnpaidInvoice->regulations()->create([
-            //         'amount' => $this->amount,
-            //         'date' => $this->search['date'] ? $this->search['date'] : now(),
-            //     ]);
-            //     session()->flash('success', 'Paiement effectué avec succès.');
-            // } else {}
+        if ($this->amount + $this->invoice->regulations->sum('amount') > $this->invoice->total) {
+            session()->flash('error', 'La somme des réglements ne peut être supérieur au total.');
         } else {
-            if ($this->amount > $this->invoice->total) {
-                session()->flash('error', 'Le montant payé ne doit pas etre supérieur au montant dû.');
-            } else {
-                $this->invoice->regulations()->create([
-                    'amount' => $this->amount,
-                    'date' => $this->search['date'] ? $this->search['date'] : now(),
-                ]);
+            if ($dept > 0) {
+                while ($dept > 0) {
+                    $subscription = $subscription->load('invoices');
+                    $oldestUnpaidInvoices = $subscription
+                        ->invoices()
+                        ->where('id', '<>', $this->invoice->id)
+                        ->oldest()
+                    ->get();
+
+                    foreach ($oldestUnpaidInvoices as $invoice) {
+                        while ($invoice->isPaid == false || $this->amount > 0) {
+                            if ($this->amount > $invoice->total) {
+                                $invoice->regulations()->create([
+                                    'amount' => $invoice->total,
+                                    'date' => $this->search['date'] ? $this->search['date'] : now(),
+                                ]);
+                                $this->amount -= $invoice->total;
+                            } else {
+                                $invoice->regulations()->create([
+                                    'amount' => $invoice->amount,
+                                    'date' => $this->search['date'] ? $this->search['date'] : now(),
+                                ]);
+                                $this->amount = 0;
+                            }
+                        }
+                    }
+                    $dept = $this->invoice->subscription->debt;
+                }
                 session()->flash('success', 'Paiement effectué avec succès.');
+            } else {
+                if ($this->amount > $this->invoice->total) {
+                    session()->flash('error', 'Le montant payé ne doit pas etre supérieur au montant dû.');
+                } else {
+                    $this->invoice->regulations()->create([
+                        'amount' => $this->amount,
+                        'date' => $this->search['date'] ? $this->search['date'] : now(),
+                    ]);
+                    session()->flash('success', 'Paiement effectué avec succès.');
+                }
             }
         }
 
-        dd($this->amount);
+        $this->amount = 0;
     }
 }

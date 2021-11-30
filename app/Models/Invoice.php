@@ -47,4 +47,9 @@ class Invoice extends Model
     {
         return (new Carbon())->year . str_pad($this->attributes['code'], 4, '0', STR_PAD_LEFT);
     }
+
+    public function getTotalAmountPaidAttribute()
+    {
+        return $this->regulations->sum('amount');
+    }
 }

@@ -43,7 +43,7 @@
                 </div>
             @endif
             @foreach ($invoices as $invoice)
-                <x-invoice-content :invoice="$invoice" /> 
+                <x-invoice-content :invoice="$invoice" />
                 @if (!$loop->last)
                     <div style="page-break-after: always;"></div>
                 @endif

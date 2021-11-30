@@ -49,7 +49,7 @@
                                 <p>College Anne-marie javouhey</p>
                                 <p>Avenue Cheikh anta Diop</p>
                                 <p>B.P. 7035 - Dakar-Medina</p>
-                                <p>** Facture {{ Carbon\Carbon::parse($invoice->created_at)->monthName }} {{ Carbon\Carbon::now()->format('Y') }}</p>
+                                <p>** Recu {{ Carbon\Carbon::parse($invoice->created_at)->monthName }} {{ Carbon\Carbon::now()->format('Y') }}</p>
                             </div>
                             <div class="flex flex-col p-16">
                                 <p><span class="font-bold">Nom responsable: </span>{{ $invoice->subscription->pupil->tutor_full_name }}</p>
@@ -84,7 +84,8 @@
                                 <tr class="flex">
                                     <td style="width: 90%;" colspan="3" class="border px-6 py-4 whitespace-nowrap">
                                         <div class="w-full">
-                                            <p class="font-bold">TOTAL {{ $invoice->subscription->pupil->full_name }}</p>
+                                            <p class="font-bold">TOTAL FACTURE {{ $invoice->subscription->pupil->full_name }}</p>
+                                            <p>Montant avancé</p>
                                             <p>SOLDE PRECEDENT</p>
                                             <p class="uppercase">Facture *Obligatoire* Pour le reglement</p>
                                             <div class="w-full flex justify-between uppercase">
@@ -95,12 +96,13 @@
                                     </td>
                                     <td style="width: 10%;" class="whitespace-nowrap border-t border-b">
                                         <div class="w-full px-6 pt-4 pb-2">
-                                            <p>{{ number_format($invoice->total, 0, '.', ' ') }}</p>
+                                            <p>{{ number_format($invoice->total-$invoice->totalAmountPaid, 0, '.', ' ') }}</p>
+                                            <p>{{ number_format($invoice->totalAmountPaid, 0, '.', ' ') }}</p>
                                             <p class="font-bold">{{ $invoice->subscription->debt }}</p>
                                         </div>
                                         <div class="w-full px-6 pb-4 pt-2 border-t">
                                             <p class="font-bold total">
-                                                {{ number_format($invoice->total + $invoice->subscription->debt, 0, '.', ' ') }}
+                                                {{ number_format(($invoice->total-$invoice->totalAmountPaid) + $invoice->subscription->debt, 0, '.', ' ') }}
                                             </p>
                                         </div>
                                     </td>
@@ -118,7 +120,7 @@
                                                     <p class="uppercase pr-6">A payer</p>
                                                     <p>
                                                         <span class="font-bold">
-                                                            {{ number_format($invoice->total + $invoice->subscription->debt, 0, '.', ' ') }}
+                                                            {{ number_format(($invoice->total-$invoice->totalAmountPaid) + $invoice->subscription->debt, 0, '.', ' ') }}
                                                         </span>
                                                     </p>
                                                 </div>
@@ -142,23 +144,45 @@
                     </div>
                     <div class="w-full">
                         @if ($invoice)
-                            <div class="flex items-end mt-4 w-full gap-4">
-                                <div class="w-2/3">
-                                    <x-jet-label for="amount" value="{{ __('Veuillez entrer le montant') }}" />
-                                    <x-jet-input
-                                        id="amount"
-                                        type="text"
-                                        placeholder="{{ __('Entrer le montant') }}"
-                                        class="mt-1 block w-full"
-                                        wire:model.defer="amount"
-                                    />
+                            @if (($invoice->total-$invoice->totalAmountPaid) + $invoice->subscription->debt > 0)
+                                <div class="flex items-end mt-4 w-full gap-4">
+                                    <div class="w-2/3">
+                                        <x-jet-label for="amount" value="{{ __('Veuillez entrer le montant') }}" />
+                                        <x-jet-input
+                                            id="amount"
+                                            type="text"
+                                            placeholder="{{ __('Entrer le montant') }}"
+                                            class="mt-1 block w-full"
+                                            wire:model.defer="amount"
+                                        />
+                                    </div>
+                                    <x-jet-button wire:click="pay" wire:loading.attr="disabled">
+                                        {{ __('Réglé la facture') }}
+                                    </x-jet-button>
                                 </div>
-                                <x-jet-button wire:click="pay" wire:loading.attr="disabled">
-                                    {{ __('Réglé la facture') }}
-                                </x-jet-button>
-                            </div>
+                            @endif
                         @else
                             <p>{{ __('Aucune facture trouvée') }}</p>
+                        @endif
+                    </div>
+                    <div class="pb-4 flex items-center mt-4">
+                        @if (session()->has('error'))
+                            <div class="flex items-center bg-yellow-500 text-black text-sm font-bold px-4 py-3 relative w-full" role="alert" x-data="{show: true}" x-show="show">
+                                <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.432 0c1.34 0 2.01.912 2.01 1.957 0 1.305-1.164 2.512-2.679 2.512-1.269 0-2.009-.75-1.974-1.99C9.789 1.436 10.67 0 12.432 0zM8.309 20c-1.058 0-1.833-.652-1.093-3.524l1.214-5.092c.211-.814.246-1.141 0-1.141-.317 0-1.689.562-2.502 1.117l-.528-.88c2.572-2.186 5.531-3.467 6.801-3.467 1.057 0 1.233 1.273.705 3.23l-1.391 5.352c-.246.945-.141 1.271.106 1.271.317 0 1.357-.392 2.379-1.207l.6.814C12.098 19.02 9.365 20 8.309 20z"/></svg>
+                                <p>{{ session('error') }}</p>
+                                <span class="absolute top-0 bottom-0 right-0 px-4 py-3" @click="show = false">
+                                    <svg class="fill-current h-6 w-6 text-black" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                                </span>
+                            </div>
+                        @endif
+                        @if (session()->has('success'))
+                            <div class="flex items-center bg-green-500 text-white text-sm font-bold px-4 py-3 relative w-full" role="alert" x-data="{show: true}" x-show="show">
+                                <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.432 0c1.34 0 2.01.912 2.01 1.957 0 1.305-1.164 2.512-2.679 2.512-1.269 0-2.009-.75-1.974-1.99C9.789 1.436 10.67 0 12.432 0zM8.309 20c-1.058 0-1.833-.652-1.093-3.524l1.214-5.092c.211-.814.246-1.141 0-1.141-.317 0-1.689.562-2.502 1.117l-.528-.88c2.572-2.186 5.531-3.467 6.801-3.467 1.057 0 1.233 1.273.705 3.23l-1.391 5.352c-.246.945-.141 1.271.106 1.271.317 0 1.357-.392 2.379-1.207l.6.814C12.098 19.02 9.365 20 8.309 20z"/></svg>
+                                <p>{{ session('success') }}</p>
+                                <span class="absolute top-0 bottom-0 right-0 px-4 py-3" @click="show = false">
+                                    <svg class="fill-current h-6 w-6 text-white" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                                </span>
+                            </div>
                         @endif
                     </div>
                 </div>
