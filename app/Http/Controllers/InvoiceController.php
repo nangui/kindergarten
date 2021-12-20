@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Models\SchoolClass;
 use App\Models\SchoolYear;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use PDF;
 
 class InvoiceController extends Controller
@@ -23,6 +24,28 @@ class InvoiceController extends Controller
         return PDF::loadView('livewire.invoice.preview', [
             'invoices' => $this->invoices,
             'isPreview' => false,
+        ])->stream();
+    }
+
+    public function downloadReceipt(Request $request)
+    {
+        $data = $request->only([
+            'month',
+            'tutor',
+            'pupil',
+            'total',
+            'amount_to_pay',
+            'total_amount_paid',
+            'class_desc',
+            'dept',
+            'given_amount',
+            'code',
+            'created_date',
+            'year'
+        ]);
+
+        return PDF::loadView('livewire.regulation.receipt', [
+            'data' => $data
         ])->stream();
     }
 

@@ -96,7 +96,7 @@
                                     </td>
                                     <td style="width: 10%;" class="whitespace-nowrap border-t border-b">
                                         <div class="w-full px-6 pt-4 pb-2">
-                                            <p>{{ number_format($invoice->total-$invoice->totalAmountPaid, 0, '.', ' ') }}</p>
+                                            <p>{{ number_format($invoice->total, 0, '.', ' ') }}</p>
                                             <p>{{ number_format($invoice->totalAmountPaid, 0, '.', ' ') }}</p>
                                             <p class="font-bold">{{ $invoice->subscription->debt }}</p>
                                         </div>
@@ -159,6 +159,25 @@
                                     <x-jet-button wire:click="pay" wire:loading.attr="disabled">
                                         {{ __('Réglé la facture') }}
                                     </x-jet-button>
+                                    @if ($paid)
+                                        <a target="_blank" href="{{ route('print.receipt', [
+                                            'month' => Carbon\Carbon::parse($invoice->created_at)->monthName,
+                                            'year' => Carbon\Carbon::now()->format('Y'),
+                                            'tutor' => $invoice->subscription->pupil->tutor_full_name,
+                                            'pupil' => $invoice->subscription->pupil->full_name,
+                                            'class_desc' => $invoice->subscription->school_class->designation,
+                                            'total' => $invoice->total,
+                                            'amount_to_pay' => ($invoice->total-$invoice->totalAmountPaid) + $invoice->subscription->debt,
+                                            'total_amount_paid' => $invoice->totalAmountPaid,
+                                            'dept' => $invoice->subscription->debt,
+                                            'given_amount' => $savedAmount,
+                                            'code' => $invoice->code,
+                                            'created_date' => $invoice->created_at->format('d/m/Y')
+                                        ])}}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent font-semibold text-xs text-white tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition"
+                                        >
+                                            Imprimer reçu
+                                        </a>
+                                    @endif
                                 </div>
                             @endif
                         @else

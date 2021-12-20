@@ -12,6 +12,8 @@ class Show extends Component
     public $pupil;
     public $amount = 0;
     public $invoice = null;
+    public $savedAmount = 0;
+    public $paid = false;
 
     public function render()
     {
@@ -36,11 +38,13 @@ class Show extends Component
     {
         $subscription = $this->invoice->subscription;
         $dept = $subscription->debt;
+        $this->savedAmount = $this->amount;
 
         if ($this->amount + $this->invoice->regulations->sum('amount') > $this->invoice->total) {
             session()->flash('error', 'La somme des réglements ne peut être supérieur au total.');
         } else {
             if ($dept > 0) {
+                $this->paid = false;
                 while ($dept > 0) {
                     $subscription = $subscription->load('invoices');
                     $oldestUnpaidInvoices = $subscription
@@ -69,6 +73,7 @@ class Show extends Component
                     $dept = $this->invoice->subscription->debt;
                 }
                 session()->flash('success', 'Paiement effectué avec succès.');
+                $this->paid = true;
             } else {
                 if ($this->amount > $this->invoice->total) {
                     session()->flash('error', 'Le montant payé ne doit pas etre supérieur au montant dû.');

@@ -48,5 +48,6 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         Route::get('/invoices/download/{date}/{year}/{class}', [InvoiceController::class, 'download'])->name('invoice.download');
         Route::get('/invoices/preview/{date}/{year}/{class}', InvoicePreview::class)->name('invoice.preview');
         Route::get('/regulation', RegulationShow::class)->name('regulation.list');
+        Route::get('/print-receipt', [InvoiceController::class, 'downloadReceipt'])->name('print.receipt');
     });
 });
