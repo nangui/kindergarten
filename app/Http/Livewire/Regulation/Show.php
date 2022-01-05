@@ -83,6 +83,7 @@ class Show extends Component
                         'date' => $this->search['date'] ? $this->search['date'] : now(),
                     ]);
                     session()->flash('success', 'Paiement effectué avec succès.');
+                    $this->paid = true;
                 }
             }
         }

@@ -163,16 +163,13 @@
                                         <a target="_blank" href="{{ route('print.receipt', [
                                             'month' => Carbon\Carbon::parse($invoice->created_at)->monthName,
                                             'year' => Carbon\Carbon::now()->format('Y'),
-                                            'tutor' => $invoice->subscription->pupil->tutor_full_name,
-                                            'pupil' => $invoice->subscription->pupil->full_name,
+                                            'hour' => Carbon\Carbon::now()->format('H:i'),
+                                            'first_name' => $invoice->subscription->pupil->first_name,
+                                            'last_name' => $invoice->subscription->pupil->last_name,
                                             'class_desc' => $invoice->subscription->school_class->designation,
-                                            'total' => $invoice->total,
-                                            'amount_to_pay' => ($invoice->total-$invoice->totalAmountPaid) + $invoice->subscription->debt,
-                                            'total_amount_paid' => $invoice->totalAmountPaid,
-                                            'dept' => $invoice->subscription->debt,
+                                            'year_desc' => $invoice->subscription->school_year->designation,
                                             'given_amount' => $savedAmount,
-                                            'code' => $invoice->code,
-                                            'created_date' => $invoice->created_at->format('d/m/Y')
+                                            'code' => $invoice->subscription->pupil->code,
                                         ])}}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent font-semibold text-xs text-white tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition"
                                         >
                                             Imprimer reçu

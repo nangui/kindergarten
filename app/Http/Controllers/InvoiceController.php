@@ -31,16 +31,13 @@ class InvoiceController extends Controller
     {
         $data = $request->only([
             'month',
-            'tutor',
-            'pupil',
-            'total',
-            'amount_to_pay',
-            'total_amount_paid',
+            'hour',
+            'first_name',
+            'last_name',
             'class_desc',
-            'dept',
+            'year_desc',
             'given_amount',
             'code',
-            'created_date',
             'year'
         ]);
 
